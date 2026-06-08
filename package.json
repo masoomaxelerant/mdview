@@ -45,7 +45,8 @@
       {
         "provider": "github",
         "owner": "masoomaxelerant",
-        "repo": "mdview"
+        "repo": "mdview",
+        "releaseType": "release"
       }
     ],
     "win": {

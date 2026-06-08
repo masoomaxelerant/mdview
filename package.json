@@ -24,14 +24,12 @@
       {
         "ext": "md",
         "name": "Markdown File",
-        "role": "Viewer",
-        "icon": "assets/icon"
+        "role": "Viewer"
       },
       {
         "ext": "markdown",
         "name": "Markdown File",
-        "role": "Viewer",
-        "icon": "assets/icon"
+        "role": "Viewer"
       }
     ],
     "mac": {

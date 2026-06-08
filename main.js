@@ -2,6 +2,9 @@ const { app, BrowserWindow, Menu, dialog, ipcMain, shell } = require('electron')
 const path = require('path');
 const fs = require('fs');
 
+const UPDATE_REPO = 'masoomaxelerant/mdview';
+const UPDATE_API = `https://api.github.com/repos/${UPDATE_REPO}/releases/latest`;
+
 let mainWindow = null;
 let pendingOpenPath = null;
 let fileWatcher = null;
@@ -112,6 +115,68 @@ async function showOpenDialog() {
   }
 }
 
+// Returns true if `remote` is a newer semver than `local` (e.g. "1.0.3" > "1.0.2").
+// Strips leading "v" and handles missing components ("1.1" treated as "1.1.0").
+function isNewerVersion(remote, local) {
+  const parse = (v) => String(v).replace(/^v/, '').split('.').map((n) => parseInt(n, 10) || 0);
+  const r = parse(remote);
+  const l = parse(local);
+  for (let i = 0; i < Math.max(r.length, l.length); i++) {
+    const a = r[i] || 0;
+    const b = l[i] || 0;
+    if (a > b) return true;
+    if (a < b) return false;
+  }
+  return false;
+}
+
+// Fetches the latest GitHub release and tells the renderer if there's a newer
+// version available. `manual` = true means the user clicked "Check for updates…"
+// and should see a "you're up to date" dialog if there's nothing newer.
+async function checkForUpdates({ manual = false } = {}) {
+  try {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 6000);
+    const res = await fetch(UPDATE_API, {
+      signal: controller.signal,
+      headers: {
+        'User-Agent': `MDView/${app.getVersion()}`,
+        Accept: 'application/vnd.github+json',
+      },
+    });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    const latest = (data.tag_name || '').replace(/^v/, '');
+    const current = app.getVersion();
+    if (latest && isNewerVersion(latest, current) && mainWindow) {
+      mainWindow.webContents.send('update:available', {
+        version: latest,
+        currentVersion: current,
+        releaseUrl: data.html_url,
+        publishedAt: data.published_at,
+        notes: data.body || '',
+      });
+    } else if (manual && mainWindow) {
+      dialog.showMessageBox(mainWindow, {
+        type: 'info',
+        title: 'You’re up to date',
+        message: `MDView ${current} is the latest version.`,
+      });
+    }
+  } catch (err) {
+    if (manual && mainWindow) {
+      dialog.showMessageBox(mainWindow, {
+        type: 'warning',
+        title: 'Update check failed',
+        message: 'Could not reach the update server.',
+        detail: String(err && err.message ? err.message : err),
+      });
+    }
+    // Silent on automatic checks — offline / API issues shouldn't bother the user.
+  }
+}
+
 function buildMenu() {
   const isMac = process.platform === 'darwin';
   const template = [
@@ -120,6 +185,10 @@ function buildMenu() {
           label: app.name,
           submenu: [
             { role: 'about' },
+            {
+              label: 'Check for Updates…',
+              click: () => checkForUpdates({ manual: true }),
+            },
             { type: 'separator' },
             { role: 'services' },
             { type: 'separator' },
@@ -257,6 +326,9 @@ app.whenReady().then(() => {
   if (fileArg && fs.existsSync(fileArg)) {
     pendingOpenPath = path.resolve(fileArg);
   }
+
+  // Check for updates a few seconds after launch — don't compete with window paint.
+  setTimeout(() => checkForUpdates({ manual: false }), 4000);
 
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

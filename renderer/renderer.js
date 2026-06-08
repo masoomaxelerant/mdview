@@ -85,6 +85,11 @@ const dropOverlay = document.getElementById('drop-overlay');
 const findBar = document.getElementById('find-bar');
 const findInput = document.getElementById('find-input');
 const findCount = document.getElementById('find-count');
+const updateBanner = document.getElementById('update-banner');
+const updateVersionEl = document.getElementById('update-version');
+const updateCurrentEl = document.getElementById('update-current');
+const updateDownloadBtn = document.getElementById('update-download');
+const updateDismissBtn = document.getElementById('update-dismiss');
 
 // ── Render ────────────────────────────────────────────────────────────────────
 function render(content) {
@@ -251,6 +256,28 @@ window.mdview.onAction((action) => {
   } else if (action === 'toggle-theme') {
     toggleTheme();
   }
+});
+
+// ── Update banner ─────────────────────────────────────────────────────────────
+// Triggered by the main process when GitHub Releases has a newer version. We
+// remember which versions the user has dismissed so we don't re-show the same
+// one — but we *do* surface the next one when it appears.
+const DISMISSED_KEY = 'mdview.update.dismissedVersion';
+
+window.mdview.onUpdateAvailable((data) => {
+  if (!data || !data.version) return;
+  const dismissed = localStorage.getItem(DISMISSED_KEY);
+  if (dismissed === data.version) return; // already chose to skip this one
+  updateVersionEl.textContent = data.version;
+  updateCurrentEl.textContent = data.currentVersion || '—';
+  updateDownloadBtn.onclick = () => {
+    if (data.releaseUrl) window.mdview.openExternal(data.releaseUrl);
+  };
+  updateDismissBtn.onclick = () => {
+    localStorage.setItem(DISMISSED_KEY, data.version);
+    updateBanner.classList.remove('visible');
+  };
+  updateBanner.classList.add('visible');
 });
 
 // ── Find in document ──────────────────────────────────────────────────────────

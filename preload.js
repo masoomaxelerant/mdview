@@ -14,6 +14,7 @@ window.mdview = {
   },
   onFileOpened: (cb) => ipcRenderer.on('file:opened', (_e, data) => cb(data)),
   onFileChanged: (cb) => ipcRenderer.on('file:changed', (_e, data) => cb(data)),
+  onUpdateAvailable: (cb) => ipcRenderer.on('update:available', (_e, data) => cb(data)),
   onAction: (cb) => {
     ipcRenderer.on('action:reload', () => cb('reload'));
     ipcRenderer.on('action:print', () => cb('print'));

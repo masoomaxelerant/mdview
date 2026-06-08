@@ -105,6 +105,52 @@ body {
   background: var(--bg);
 }
 
+/* Update banner — shown only when a newer release exists on GitHub */
+.update-banner {
+  display: none;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, rgba(9, 105, 218, 0.10), rgba(9, 105, 218, 0.04));
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.update-banner.visible {
+  display: flex;
+}
+
+.update-banner .update-icon {
+  font-size: 16px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.update-banner .update-text {
+  flex: 1;
+}
+
+.update-banner button {
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--fg);
+  border-radius: 6px;
+  padding: 4px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.update-banner button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  font-weight: 500;
+}
+
+.update-banner button.primary:hover {
+  filter: brightness(1.08);
+}
+
 /* Find bar — shown only when the user opens it via ⌘F */
 .find-bar {
   display: none;

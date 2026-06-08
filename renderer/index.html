@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https: file:; script-src 'self'; font-src 'self' data:;"
+    />
+    <title>MDView</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../node_modules/highlight.js/styles/github.css" id="hljs-light" />
+    <link
+      rel="stylesheet"
+      href="../node_modules/highlight.js/styles/github-dark.css"
+      id="hljs-dark"
+      disabled
+    />
+  </head>
+  <body class="theme-light">
+    <div class="titlebar">
+      <div class="titlebar-drag"></div>
+      <div class="titlebar-info">
+        <span id="file-name">No file open</span>
+        <span id="file-path" class="muted"></span>
+      </div>
+      <div class="titlebar-actions">
+        <button id="btn-open" title="Open file (⌘O)">Open…</button>
+        <button id="btn-theme" title="Toggle theme (⌘⇧T)">🌓</button>
+      </div>
+    </div>
+
+    <div id="find-bar" class="find-bar" hidden>
+      <input id="find-input" type="text" placeholder="Find in document…" />
+      <span id="find-count" class="muted">0 / 0</span>
+      <button id="find-prev" title="Previous">↑</button>
+      <button id="find-next" title="Next">↓</button>
+      <button id="find-close" title="Close">✕</button>
+    </div>
+
+    <main id="content" class="markdown-body">
+      <div class="empty-state">
+        <div class="empty-icon">📄</div>
+        <h1>MDView</h1>
+        <p>No file open.</p>
+        <button id="empty-open" class="primary">Open Markdown file</button>
+        <p class="muted small">
+          Or drag a <code>.md</code> file onto this window.<br />
+          Tip: in Finder, right-click a <code>.md</code> file → Get Info →
+          Open with → MDView → <strong>Change All…</strong> to open them on
+          double-click, just like a PDF.
+        </p>
+      </div>
+    </main>
+
+    <div id="drop-overlay" class="drop-overlay">
+      <div>Drop to open</div>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>

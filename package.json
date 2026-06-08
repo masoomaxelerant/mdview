@@ -1,0 +1,60 @@
+{
+  "name": "mdfileview",
+  "version": "1.0.0",
+  "description": "A standalone viewer for Markdown files — opens .md files directly in rendered view, like a PDF reader.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "build:linux": "electron-builder --linux"
+  },
+  "build": {
+    "appId": "com.mdfileview.app",
+    "productName": "MDView",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "assets/**/*"
+    ],
+    "fileAssociations": [
+      {
+        "ext": "md",
+        "name": "Markdown File",
+        "role": "Viewer",
+        "icon": "assets/icon"
+      },
+      {
+        "ext": "markdown",
+        "name": "Markdown File",
+        "role": "Viewer",
+        "icon": "assets/icon"
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": "dmg"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Office"
+    }
+  },
+  "keywords": ["markdown", "viewer", "md", "reader"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "dompurify": "^3.2.4",
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.6"
+  },
+  "devDependencies": {
+    "electron": "^33.2.1",
+    "electron-builder": "^25.1.8"
+  }
+}

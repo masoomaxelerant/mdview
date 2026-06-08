@@ -258,13 +258,13 @@ let findHits = [];
 let findIndex = 0;
 
 function openFind() {
-  findBar.hidden = false;
+  findBar.classList.add('visible');
   findInput.focus();
   findInput.select();
 }
 
 function closeFind() {
-  findBar.hidden = true;
+  findBar.classList.remove('visible');
   clearFind();
 }
 
@@ -363,7 +363,7 @@ document.getElementById('find-next').addEventListener('click', () => {
 document.getElementById('find-close').addEventListener('click', closeFind);
 
 window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && !findBar.hidden) {
+  if (e.key === 'Escape' && findBar.classList.contains('visible')) {
     closeFind();
   }
 });

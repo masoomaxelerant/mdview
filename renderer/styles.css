@@ -105,14 +105,18 @@ body {
   background: var(--bg);
 }
 
-/* Find bar */
+/* Find bar — shown only when the user opens it via ⌘F */
 .find-bar {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
   background: var(--bg-soft);
   border-bottom: 1px solid var(--border);
+}
+
+.find-bar.visible {
+  display: flex;
 }
 
 .find-bar input {

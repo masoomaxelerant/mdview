@@ -2,6 +2,8 @@
 
 A standalone desktop viewer for Markdown files — opens `.md` files **directly in rendered view**, like a PDF reader.
 
+![MDView rendering a Markdown file](docs/screenshot.png)
+
 Most editors (VS Code, Sublime, etc.) open `.md` files in **edit mode** by default and require a keyboard shortcut to toggle a preview pane. MDView skips all of that: double-click a `.md` file, see the rendered output. That's it.
 
 ## Features

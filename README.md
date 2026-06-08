@@ -18,9 +18,15 @@ Most editors (VS Code, Sublime, etc.) open `.md` files in **edit mode** by defau
 
 ## Install
 
-Pre-built installers will be published on the [Releases](https://github.com/masoomaxelerant/mdview/releases) page.
+Download the latest `.dmg` from the [Releases](https://github.com/masoomaxelerant/mdview/releases) page, then:
 
-For now you can run it from source — see [Development](#development) below.
+1. Double-click the `.dmg` and drag **MDView** into **Applications**.
+2. Open Terminal and run **once**:
+   ```bash
+   xattr -cr /Applications/MDView.app
+   ```
+   This is required because the build is not code-signed with an Apple Developer ID. Without this step, macOS shows *"MDView is damaged and can't be opened"* the first time you launch — see [Troubleshooting](#troubleshooting) below for the full explanation.
+3. Open MDView from `/Applications` or Launchpad.
 
 ## Make MDView the default `.md` opener
 
@@ -77,6 +83,27 @@ npm run build:linux    # Linux AppImage
 ```
 
 Output lands in `dist/`.
+
+## Troubleshooting
+
+### "MDView is damaged and can't be opened"
+
+This message is **misleading** — the app is not actually damaged. macOS Gatekeeper shows it for any app that:
+
+- was downloaded via a browser (browsers mark downloads with the `com.apple.quarantine` attribute), **and**
+- isn't signed with an Apple Developer ID certificate.
+
+Older macOS versions just warned about "an unidentified developer" and let you right-click → Open. Sonoma and Sequoia changed the message to "damaged" and removed the right-click bypass, even though the binary is fine.
+
+**Fix** — once, in Terminal:
+
+```bash
+xattr -cr /Applications/MDView.app
+```
+
+This strips the quarantine flag. The app will then open normally for all future launches.
+
+> The long-term fix is to ship a signed and notarized build, which requires an Apple Developer Program membership ($99/year). It's on the roadmap.
 
 ## License
 

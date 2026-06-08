@@ -1,6 +1,6 @@
 {
   "name": "mdfileview",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A standalone viewer for Markdown files — opens .md files directly in rendered view, like a PDF reader.",
   "main": "main.js",
   "scripts": {

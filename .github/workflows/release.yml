@@ -1,0 +1,40 @@
+name: Release
+
+# Triggered whenever a tag starting with "v" is pushed (e.g. v1.0.1, v1.1.0).
+# To cut a new release:
+#   git tag v1.0.1 && git push origin v1.0.1
+on:
+  push:
+    tags:
+      - 'v*'
+
+# Required so electron-builder can create/update the GitHub Release for the tag.
+permissions:
+  contents: write
+
+jobs:
+  build-mac:
+    name: Build macOS (x64 + arm64)
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build & publish macOS app
+        env:
+          # electron-builder reads GH_TOKEN to publish to GitHub Releases.
+          # GITHUB_TOKEN is the default token provided by Actions.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # We don't have an Apple Developer cert configured — tell
+          # electron-builder to skip code-signing without a warning.
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+        run: npm run release:mac

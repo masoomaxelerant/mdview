@@ -15,6 +15,7 @@ Most editors (VS Code, Sublime, etc.) open `.md` files in **edit mode** by defau
 - 🖨 Print or save as PDF (`⌘P`)
 - 🔗 External links open in your default browser, relative links resolve from the file's folder
 - 🛡 HTML output sanitized with DOMPurify
+- 🔔 In-app notification when a new release is available on GitHub
 
 ## Install
 

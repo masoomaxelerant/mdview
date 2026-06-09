@@ -1,6 +1,6 @@
 {
   "name": "mdfileview",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A standalone viewer for Markdown files — opens .md files directly in rendered view, like a PDF reader.",
   "main": "main.js",
   "scripts": {
@@ -9,7 +9,9 @@
     "build:mac": "electron-builder --mac",
     "build:win": "electron-builder --win",
     "build:linux": "electron-builder --linux",
-    "release:mac": "electron-builder --mac --publish always"
+    "release:mac": "electron-builder --mac --publish always",
+    "release:win": "electron-builder --win --publish always",
+    "release:linux": "electron-builder --linux --publish always"
   },
   "build": {
     "appId": "com.mdfileview.app",
@@ -50,7 +52,15 @@
       }
     ],
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "artifactName": "MDView-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "MDView"
     },
     "linux": {
       "target": "AppImage",
